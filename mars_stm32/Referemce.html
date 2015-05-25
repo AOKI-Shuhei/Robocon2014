@@ -1,0 +1,528 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>mars_stm32</title>
+    <!--<link rel="stylesheet" href="style.css" />-->
+    <style type="text/css"><!--h1{background-color:#dbdbdb;}body{font-family:Consolas;}nav div.index{width:200px;float:left;}nav p{width:100%;word-break:break-all;}nav p#id1{min-height:810px;}nav p#id2{min-height:110px;}nav p#id3{min-height:210px;}nav p#id4{min-height:120px;}nav ul{margin:0;padding:0;}nav ul a{display:block;position:relative;padding:5px 10px;font-size:small;text-decoration:none;height:15px;}nav ul a:hover{background-color:#c6c6c6;}nav ul li{margin:0px;list-style-type:none;}article table{font-size:medium;}article table th{min-width:100px;text-align:left;font-weight:normal;}article p.index{text-decoration:none;font-weight:bolder;}article p a{position:relative;text-decoration:none;}article p a:hover{background-color:#c6c6c6;}pre.code{font-family:Consolas;}footer{text-align:right;}//--></style>
+</head>
+<body>
+    <footer>2014/7/18<br />S. AOKI</footer>
+    <nav>
+        <h1>関数一覧</h1>
+        <div>
+            <div class="index">
+                <h2>mars_stm32.h</h2>
+
+                <ul>
+                    <li><a href="#RCC_Configuration">RCC_Configuration</a></li>
+                    <li><a href="#PinMode">PinMode</a></li>
+                    <li><a href="#IO_Write">IO_Write</a></li>
+                    <li><a href="#IO_Read">IO_Read</a></li>
+                    <li><a href="#ADC_Read">ADC_Read</a></li>
+                    <li><a href="#PWM_Write">PWM_Write</a></li>
+                    <li><a href="#SERVO_Write">SERVO_Write</a></li>
+
+                    <li><a href="#USART_Mode">USART_Mode</a></li>
+                    <li><a href="#USART_Begin">USART_Begin</a></li>
+                    <li><a href="#USART_Close">USART_Close</a></li>
+                    <li><a href="#USART_ParityBegin">USART_ParityBegin</a></li>
+                    <li><a href="#USART_Putc">USART_Putc</a></li>
+                    <li><a href="#USART_Getc">USART_Getc</a></li>
+                    <li><a href="#USART_Write">USART_Write</a></li>
+                    <li><a href="#USART_Print">USART_Print</a></li>
+                    <li><a href="#USART_Read">USART_Read</a></li>
+                    <li><a href="#USART_ReadSplit">USART_ReadSplit</a></li>
+                    <li><a href="#USART_GetRxBufferSize">USART_GetRxBufferSize</a></li>
+                    <li><a href="#USART_GetTxBufferSize">USART_GetTxBufferSize</a></li>
+                    <li><a href="#USART_ClearRxBuffer">USART_ClearRxBuffer</a></li>
+                    <li><a href="#USART_ClearTxBuffer">USART_ClearTxBuffer</a></li>
+
+                    <li><a href="#Delay">Delay</a></li>
+                    <li><a href="#Millis">Millis</a></li>
+
+                    <li><a href="#StartStopWatch">StartStopWatch</a></li>
+                    <li><a href="#StopStopWatch">StopStopWatch</a></li>
+                    <li><a href="#ResetStopWatch">ResetStopWatch</a></li>
+                    <li><a href="#GetStopWatchMillis">GetStopWatchMillis</a></li>
+                    <li><a href="#RestartStopWatch">RestartStopWatch</a></li>
+                    <li><a href="#IsRunningStopWatch">IsRunningStopWatch</a></li>
+                </ul>
+            </div>
+            <p id="id1">stm32のコーディングをラップした部分。これが提供する機能はGPIO、ADC、PWM、SERVO、USART、時間関連。ロボコンに限らず他にも流用する余地がまだまだある部分。他のファイルはロボコン用のコードである。<br />
+            ピン配置を考えた上でリマップが必要な場合はGPIO_PinRemapConfigを呼び出す必要がある。これの詳細は<a href="http://www.minokasago.org/STM32wiki/index.php?GPIO_PinRemapConfig">ここ</a>を参照のこと。USARTのリマップはUSART_Modeの引数で指定することで実行される。<br />
+            最適化の余地はまだまだあり。実行速度の高速化、メモリ使用量の低減、機能の増強、安全性の向上、エトセトラエトセトラ。</p>
+        </div>
+        <hr />
+        <div>
+            <div class="index">
+                <h2>mars_USART.h</h2>
+
+                <ul>
+                    <li><a href="#USART_Readnbyte">USART_Readnbyte</a></li>
+                </ul>
+            </div>
+            <p id="id2">色々あって関数が1つしか残らなかった。ロボコンで使用した通信プロトコルの受信部分を実装したもの。</p>
+        </div>
+        <hr />
+        <div>
+            <div class="index">
+                <h2>mars_make_servo_moter.h</h2>
+
+                <ul>
+                    <li><a href="#DC_SERVO_StructInitialize">DC_SERVO_StructInitialize</a></li>
+                    <li><a href="#DC_SERVO_SetKP_KI_KD">DC_SERVO_SetKP_KI_KD</a></li>
+                    <li><a href="#DC_SERVO_RegisterHash">DC_SERVO_RegisterHash</a></li>
+                    <li><a href="#DC_SERVO_Change">DC_SERVO_Change</a></li>
+                    <li><a href="#DC_SERVO_ClearIntegral">DC_SERVO_ClearIntegral</a></li>
+                </ul>
+            </div>
+            <p id="id3"><br /><br /><br />DCモータのサーボ化を行うための関数群。(ファイル名、motorの綴り間違えているが放置)</p>
+        </div>
+        <hr />
+        <h1>構造体他</h1>
+        <div>
+            <div class="index">
+                <ul>
+                    <li><a href="#PIN_NUMBER">PIN_NUMBER</a></li>
+                    <li><a href="#USART_TypeDef">USART_TypeDef*</a></li>
+                    <li><a href="#DC_SERVO">DC_SERVO</a></li>
+                    <li><a href="#example">example</a></li>
+                </ul>
+            </div>
+            <p id="id4"></p>
+            <hr />
+        </div>
+    </nav>
+    <hr />
+    <article>
+        <h2>mars_stm32.h</h2>
+        <ul>
+            <li>
+                <p class="index" id="RCC_Configuration">void RCC_Configuration(void)</p>
+                <table>
+                </table>
+                <p class="comment">
+                    諸々の初期設定を行う。プログラム開始時に一度だけ呼び出す必要がある。使いそうなモジュールは全て起動させているため省電力化は行っていない。
+                </p>
+            </li>
+            <li>
+                <p class="index" id="PinMode">int PinMode(<a href="#PIN_NUMBER">PIN_NUMBER</a> pin_number, PIN_MODE mode)</p>
+                <table>
+                    <tr><th>pin_number</th><th>ピン番号</th></tr>
+                    <tr><th>mode</th><th>ピン設定</th></tr>
+                    <tr><th><i>return</i></th><th>-1 : 失敗</th></tr>
+                </table>
+                <p class="comment">ピンの設定を行う関数。ここで設定できる項目は、GPIO、PWM、ADC、SERVOに関して。PIN_MODEのリストは次の通りである。
+                </p>
+                <table>
+                    <tr><th>IO_INPUT_PU</th><th>プルアップ入力</th></tr>
+                    <tr><th>IO_INPUT_PD</th><th>プルダウン入力</th></tr>
+                    <tr><th>IO_OUTPUT</th><th>デジタル出力</th></tr>
+                    <tr><th>PWM</th><th>PWM出力</th></tr>
+                    <tr><th>ADC</th><th>AD変換入力</th></tr>
+                    <tr><th>SERVO</th><th>サーボ用PWM出</th></tr>
+                </table>
+                <p class="comment">PWMとSERVOでは出力する周波数が違う。それぞれ20kHzと50Hzである。また、同一タイマでのPWMとSERVOの共存はできない。</p>
+            </li>
+            <li>
+                <p class="index" id="IO_Write">int IO_Write(<a href="#PIN_NUMBER">PIN_NUMBER</a> pin_number, IO_VALUE value)</p>
+                <table>
+                    <tr><th>pin_number</th><th>ピン番号</th></tr>
+                    <tr><th>value</th><th>HIGH or LOW</th></tr>
+                    <tr><th><i>return</i></th><th>-1 : 失敗</th></tr>
+                </table>
+                <p class="comment">IO_OUTPUTに設定されたピンからvalueの出力を行う。</p>
+            </li>
+            <li>
+                <p class="index" id="IO_Read">int IO_Read(<a href="#PIN_NUMBER">PIN_NUMBER</a> pin_number)</p>
+                <table>
+                    <tr><th>pin_number</th><th>ピン番号</th></tr>
+                    <tr><th><i>return</i></th><th>1 : HIGH、0 : LOLW</th></tr>
+                </table>
+                <p class="comment">IO_INPUT_xxに設定されたピンの状態を取得する。</p>
+            </li>
+            <li>
+                <p class="index" id="ADC_Read">int ADC_Read(<a href="#PIN_NUMBER">PIN_NUMBER</a> pin_number)</p>
+                <table>
+                    <tr><th>pin_number</th><th>ピン番号</th></tr>
+                    <tr><th><i>return</i></th><th>AD変換値(0 - 4095)、-1 : 失敗</th></tr>
+                </table>
+                <p class="comment">ADCに設定されたピンのAD変換値を取得する。</p>
+            </li>
+            <li>
+                <p class="index" id="PWM_Write">int PWM_Write(<a href="#PIN_NUMBER">PIN_NUMBER</a> pin_number, int value)</p>
+                <table>
+                    <tr><th>pin_number</th><th>ピン番号</th></tr>
+                    <tr><th>value</th><th>デューティ比(0 ~ 999)</th></tr>
+                    <tr><th><i>return</i></th><th>-1 : 失敗、1 : pulseの変更なし</th></tr>
+                </table>
+                <p class="comment">PWMに設定されたピンからPWM出力を行う。</p>
+            </li>
+            <li>
+                <p class="index" id="SERVO_Write">int SERVO_Write(<a href="#PIN_NUMBER">PIN_NUMBER</a> pin_number, int degree)</p>
+                <table>
+                    <tr><th>pin_number</th><th>ピン番号</th></tr>
+                    <tr><th>degree</th><th>角度(-90 ~ 90)</th></tr>
+                    <tr><th><i><i>return</i></i></th><th>-1 : 失敗、1 : pulse変更なし</th></tr>
+                </table>
+                <p class="comment">SERVOに設定されたピンからサーボ用PWM出力を行う。</p>
+            </li>
+            <li>
+                <p class="index" id="USART_Mode">int USART_Mode(<a href="#USART_TypeDef">USART_TypeDef*</a> USARTx, USART_MODE mode, FunctionalState remap)</p>
+                <table>
+                    <tr><th>USARTx</th><th>USARTの番号</th></tr>
+                    <tr><th>mode</th><th>USARTの設定</th></tr>
+                    <tr><th>remap</th><th>リマップを行うかどうか。(ENABLE or DISABLE)</th></tr>
+                    <tr><th><i><i>return</i></i></th><th>-1 : 失敗</th></tr>
+                </table>
+                <p class="comment">USARTを使用するための設定を行う。USART_MODEのリストは次の通りである。</p>
+                <table>
+                    <tr><th>SEND</th><th>送信のみ</th></tr>
+                    <tr><th>READ</th><th>受信のみ</th></tr>
+                    <tr><th>SEND_AND_READ</th><th>送受信。SEND | READと同等</th></tr>
+                </table>
+            </li>
+            <li>
+                <p class="index" id="USART_Begin">int USART_Begin(<a href="#USART_TypeDef">USART_TypeDef*</a> USARTx, int baudrate)</p>
+                <table>
+                    <tr><th>USARTx</th><th>USARTの番号</th></tr>
+                    <tr><th>baudrate</th><th>ボーレート</th></tr>
+                </table>
+                <p class="comment">USARTを指定したbaudrateで開始する。</p>
+            </li>
+            <li>
+                <p class="index" id="USART_Close">int USART_Close(<a href="#USART_TypeDef">USART_TypeDef*</a> USARTx)</p>
+                <table>
+                    <tr><th>USARTx</th><th>USARTの番号</th></tr>
+                </table>
+                <p class="comment">USARTを閉じる。</p>
+            </li>
+            <li>
+                <p class="index" id="USART_ParityBegin">int USART_ParityBegin(<a href="#USART_TypeDef">USART_TypeDef*</a> USARTx, int baudrate)</p>
+                <table>
+                    <tr><th>USARTx</th><th>USARTの番号</th></tr>
+                    <tr><th>baudrate</th><th>ボーレート</th></tr>
+                </table>
+                <p class="comment">偶数パリティビットを含むUSARTを指定したbaudrateで開始する。実験的な実装であるためこの関数の使用は想定していない。</p>
+            </li>
+            <li>
+                <p class="index" id="USART_Putc">int USART_Putc(<a href="#USART_TypeDef">USART_TypeDef*</a> USARTx, char tx_data)</p>
+                <table>
+                    <tr><th>USARTx</th><th>USARTの番号</th></tr>
+                    <tr><th>tx_data</th><th>送信データ</th></tr>
+                    <tr><th><i><i>return</i></i></th><th>-1 : 送信バッファが一杯、-2 : 送信に設定されていない</th></tr>
+                </table>
+                <p class="comment">USARTで1文字送信する。</p>
+            </li>
+            <li>
+                <p class="index" id="USART_Getc">int USART_Getc(<a href="#USART_TypeDef">USART_TypeDef*</a> USARTx)</p>
+                <table>
+                    <tr><th>USARTx</th><th>USARTの番号</th></tr>
+                    <tr><th><i><i>return</i></i></th><th>受信データ。0であればどこかで失敗している可能性あり</th></tr>
+                </table>
+                <p class="comment">USARTで1文字受信する。返り値は受信バッファが0の場合でも0を返す。</p>
+            </li>
+            <li>
+                <p class="index" id="USART_Write">int USART_Write(<a href="#USART_TypeDef">USART_TypeDef*</a> USARTx,char* data, short length)</p>
+                <table>
+                    <tr><th>USARTx</th><th>USARTの番号</th></tr>
+                    <tr><th>tx_data</th><th>送信する文字列へのポインタ</th></tr>
+                    <tr><th>length</th><th>送信データ幅</th></tr>
+                    <tr><th><i><i>return</i></i></th><th>-1 : 送信バッファが一杯、-2 : 送信に設定されていない</th></tr>
+                </table>
+                <p class="comment">USARTで文字列を送信する。文字列のフォーマットに特に指定はない。送信バッファにlength文字分の容量がなかった場合はその文字列は1文字も送信されない。</p>
+            </li>
+            <li>
+                <p class="index" id="USART_Print">int USART_Print(<a href="#USART_TypeDef">USART_TypeDef*</a> USARTx,char* data)</p>
+                <table>
+                    <tr><th>USARTx</th><th>USARTの番号</th></tr>
+                    <tr><th>data</th><th>送信する文字列へのポインタ</th></tr>
+                    <tr><th><i><i>return</i></i></th><th>-1 : 送信バッファが一杯、-2 : 送信に設定されていない</th></tr>
+                </table>
+                <p class="comment">USARTで文字列を送信する。文字列は終端文字として'\0'を含む必要がある。送信データには'\0'を含む。終端文字がない場合はプログラムが破壊されると思う。</p>
+            </li>
+            <li>
+                <p class="index" id="USART_Read">int USART_Read(<a href="#USART_TypeDef">USART_TypeDef*</a> USARTx, char* rx_data, short length)</p>
+                <table>
+                    <tr><th>USARTx</th><th>USARTの番号</th></tr>
+                    <tr><th>rx_data</th><th>受信データを入れる文字列へのポインタ</th></tr>
+                    <tr><th>length</th><th>要求する受信データ幅</th></tr>
+                    <tr><th><i>return</i></th><th>-1 : 引数に問題がある、-2 : 受信設定がされていない、1 : 受信バッファに溜まっているデータがlengthより少ない</th></tr>
+                </table>
+                <p class="comment">USARTで文字列を受信する。</p>
+            </li>
+            <li>
+                <p class="index" id="USART_ReadSplit">int USART_ReadSplit(<a href="#USART_TypeDef">USART_TypeDef*</a> USARTx, char split, char* data, short length)</p>
+                <table>
+                    <tr><th>USARTx</th><th>USARTの番号</th></tr>
+                    <tr><th>split</th><th>区切り文字</th></tr>
+                    <tr><th>data</th><th>受信データを入れる文字列へのポインタ</th></tr>
+                    <tr><th>length</th><th>要求する受信データ幅</th></tr>
+                    <tr><th><i>return</i></th><th>受信した文字数。-1 : 引数に問題がある、-2 : 受信設定がされていない</th></tr>
+                </table>
+                <p class="comment">USARTで文字列を受信する。受信文字の終端はsplitで指定した区切り文字列である。dataにはsplitは含まれず破棄される。受信バッファにsplitがない場合、splitがあったとしてもそこまでの文字数がlengthを超えていた場合も0を返す。<br />
+                また、受信バッファの先頭に'\0'があった場合はそれらを全て破棄している。これは相手がUSART_Printを使用して送信した場合、この関数の呼び出しだけでは'\0'が受信ﾊバッファに残されてしまうことへの対処である。</p>
+            </li>
+            <li>
+                <p class="index" id="USART_GetRxBufferSize">int GetRxBufferSize(<a href="#USART_TypeDef">USART_TypeDef*</a> USARTx)</p>
+                <table>
+                    <tr><th>USARTx</th><th>USARTの番号</th></tr>
+                    <tr><th><i>return</i></th>受信バッファサイズ</tr>
+                </table>
+                <p class="comment">受信バッファサイズを取得する。バッファの最大容量ではなく、受信され、プログラムが読み取っていないデータの数である。</p>
+            </li>
+            <li>
+                <p class="index" id="USART_GetTxBufferSize">int USART_GetTxBufferSize(<a href="#USART_TypeDef">USART_TypeDef*</a> USARTx)</p>
+                <table>
+                    <tr><th>USARTx</th><th>USARTの番号</th></tr>
+                    <tr><th><i>return</i></th>送信バッファサイズ</tr>
+                </table>
+                <p class="comment">送信バッファサイズを取得する。バッファの最大容量ではなく、プログラムからバッファに入れられ、まだ送信されていないデータの数である。</p>
+            </li>
+            <li>
+                <p class="index" id="USART_ClearRxBuffer">int USART_ClearRxBuffer(<a href="#USART_TypeDef">USART_TypeDef*</a> USARTx)</p>
+                <table>
+                    <tr><th>USARTx</th><th>USARTの番号</th></tr>
+                </table>
+                <p class="comment">受信バッファを空にする。</p>
+            </li>
+            <li>
+                <p class="index" id="USART_ClearTxBuffer">int USART_ClearTxBuffer(<a href="#USART_TypeDef">USART_TypeDef*</a> USARTx)</p>
+                <table>
+                    <tr><th>USARTx</th><th>USARTの番号</th></tr>
+                </table>
+                <p class="comment">送信バッファを空にする。</p>
+            </li>
+            <li>
+                <p class="index" id="Delay">void Delay(int msec)</p>
+                <table>
+                    <tr><th>msec</th><th>止める時間(ミリ秒)</th></tr>
+                </table>
+                <p class="comment">msecミリ秒間処理を止める。ただし、止めるのはポーリングのみで割込みは実行される。</p>
+            </li>
+            <li>
+                <p class="index" id="Millis">int Millis(void)</p>
+                <table>
+                    <tr><th><i>return</i></th><th>リセット時からの経過時間(ミリ秒)</th></tr>
+                </table>
+            </li>
+            <li>
+                <p class="index" id="StartStopWatch">int StartStopWatch(int number)</p>
+                <table>
+                    <tr><th>number</th><th>使用するストップウォッチの番号</th></tr>
+                    <tr><th><i>return</i></th><th>-1 : numberが範囲外</th></tr>
+                </table>
+                <p class="comment">ストップウォッチをスタートさせる。ストップウォッチの数はmars_stm32.hで定義されているSTOPWATCH_NUMである。</p>
+            </li>
+            <li>
+                <p class="index" id="StopStopWatch">int StopStopWatch(int number)</p>
+                <table>
+                    <tr><th>number</th><th>使用するストップウォッチの番号</th></tr>
+                    <tr><th><i>return</i></th><th>-1 : numberが範囲外</th></tr>
+                </table>
+                <p class="comment">ストップウォッチを一時停止する。</p>
+            </li>
+            <li>
+                <p class="index" id="ResetStopWatch">int ResetStopWatch(int number)</p>
+                <table>
+                    <tr><th>number</th><th>使用するストップウォッチの番号</th></tr>
+                    <tr><th><i>return</i></th><th>-1 : numberが範囲外</th></tr>
+                </table>
+                <p class="comment">ストップウォッチをリセットする。ストップウォッチが動いている時も秒数はリセットはされるが動き続ける。</p>
+            </li>
+            <li>
+                <p class="index" id="GetStopWatchMillis">int GetStopWatchMillis(int number)</p>
+                <table>
+                    <tr><th>number</th><th>使用するストップウォッチの番号</th></tr>
+                    <tr><th><i>return</i></th><th>ストップウォッチの秒数(ミリ秒)。-1 : numberが範囲外</th></tr>
+                </table>
+                <p class="comment">ストップウォッチの秒数を取得する。ストップウォッチが動いている時でも停止している時でも取得可能である。</p>
+            </li>
+            <li>
+                <p class="index" id="RestartStopWatch">int RestartStopWatch(int number)</p>
+                <table>
+                    <tr><th>number</th><th>使用するストップウォッチの番号</th></tr>
+                    <tr><th><i>return</i></th><th>-1 : numberが範囲外</th></tr>
+                </table>
+                <p class="comment">ストップウォッチをリセットし、スタートさせる。</p>
+            </li>
+            <li>
+                <p class="index" id="IsRunningStopWatch">int IsRunningStopWatch(int number)</p>
+                <table>
+                    <tr><th>number</th><th>使用するストップウォッチの番号</th></tr>
+                    <tr><th><i>return</i></th><th>1 : 動作中、0 : 停止中、-1 : numberが範囲外</th></tr>
+                </table>
+            </li>
+        </ul>
+        <hr />
+        <h2>mars_USART.h</h2>
+        <ul>
+            <li>
+                <p class="index" id="USART_Readnbyte">int USART_Readnbyte(<a href="#USART_TypeDef">USART_TypeDef*</a> USARTx, char* data, short length)</p>
+                <table>
+                    <tr><th>USARTx</th><th>USARTの番号</th></tr>
+                    <tr><th>data</th><th>受信データを入れる文字列へのポインタ</th></tr>
+                    <tr><th>length</th><th>要求する受信データ幅</th></tr>
+                    <tr><th><i>return</i></th><th>-1 : 受信データに問題がある、1 : 受信バッファサイズがlength + 1より小さい</th></tr>
+                </table>
+                <p class="comment">USARTでデータを受信し、データが正しいかを検証する。<br />
+                この関数が受信するデータは、先頭文字として0xffを取り、それ以降のデータは必ず最上位ビットが0でなければならない。lengthに渡すのは先頭文字を抜いたデータ幅である。
+                受信データは1文字毎にバッファから取り出して検証される。1文字でも問題が発生したらそれ以降の読み取りは中止される。また、実際に受信される文字数はlength + 1文字である。
+                </p>
+            </li>
+        </ul>
+        <hr />
+        <h2>mars_make_servo_moter.h</h2>
+        <ul>
+            <li>
+                <p class="index" id="DC_SERVO_StructInitialize">int DC_SERVO_StructInitialize(<a href="#DC_SERVO">DC_SERVO</a>* dc_servo, <a href="#PIN_NUMBER">PIN_NUMBER</a> pwm_pin, <a href="#PIN_NUMBER">PIN_NUMBER</a> adc_pin, int middle_degree, int max_degree, int ccw_lpv, int cw_lpv)</p>
+                <table>
+                    <tr><th>dc_servo</th><th>対象のDC_SERVOへのポインタ</th></tr>
+                    <tr><th>pwm_pin</th><th>PWM出力するピン番号</th></tr>
+                    <tr><th>adc_pin</th><th>センサピン</th></tr>
+                    <tr><th>middle_degree</th><th>中心とする角度(degree)</th></tr>
+                    <tr><th>max_degree</th><th>中心角から可動域(degree)</th></tr>
+                    <tr><th>ccw_lpv</th><th>反時計周り(duty比50%以上側)でモータが駆動するPWMの最低値</th></tr>
+                    <tr><th>cw_lpv</th><th>時計周り(duty比50%以下側)でモータが駆動するPWMの最大値</th></tr>
+                    <tr><th><i>return</i></th><th>-1 : 設定失敗</th></tr>
+                </table>
+                <p class="comment">DCモータをサーボかするための構造体DC_SERVOを初期化する。PinModeはこの関数内で呼ばれている。</p>
+            </li>
+            <li>
+                <p class="index" id="DC_SERVO_SetKP_KI_KD">int DC_SERVO_SetKP_KI_KD(<a href="#DC_SERVO">DC_SERVO</a>* dc_servp, float kp, float ki, float kd)</p>
+                <table>
+                    <tr><th>dc_servo</th><th>対象のDC_SERVOへのポインタ</th></tr>
+                    <tr><th>kp</th><th>比例制御係数</th></tr>
+                    <tr><th>ki</th><th>積分制御係数</th></tr>
+                    <tr><th>kd</th><th>微分制御係数</th></tr>
+                </table>
+                <p class="comment">kp、ki、kdを設定する。</p>
+            </li>
+            <li>
+                <p class="index" id="DC_SERVO_RegisterHash">int DC_SERVO_RegisterHash(<a href="#DC_SERVO">DC_SERVO</a>* dc_servo, int (*Hash)(int degree))</p>
+                <table>
+                    <tr><th>dc_servo</th><th>対象のDC_SERVOへのポインタ</th></tr>
+                    <tr><th>Hash</th><th>登録するハッシュ関数へのポインタ</th></tr>
+                </table>
+                <p class="comment">ハッシュ関数を登録する。ハッシュ関数は、引数として角度(degree)を取り、それに対応するセンサ値を返す関数である必要がある。</p>
+            </li>
+            <li>
+                <p class="index" id="DC_SERVO_Change">int DC_SERVO_Change(<a href="#DC_SERVO">DC_SERVO</a>* dc_servo, int target_degree)</p>
+                <table>
+                    <tr><th>dc_servo</th><th>対象のDC_SERVOへのポインタ</th></tr>
+                    <tr><th>target_degree</th><th>目標角度(degree)</th></tr>
+                    <tr><th><i>return</i></th><th>センサ値。-1 : ハッシュ関数が登録されていない</th></tr>
+                </table>
+                <p class="comment">目標角度を設定する。pid制御計算はこの関数内で行っているためループ毎に呼び出す必要がある。</p>
+            </li>
+            <li>
+                <p class="index" id="DC_SERVO_ClearIntegral">DC_SERVO_ClearIntegral(<a href="#DC_SERVO">DC_SERVO</a>* dc_servo)</p>
+                <table>
+                    <tr><th>dc_servo</th><th>対象のDC_SERVOへのポインタ</th></tr>
+                </table>
+                <p class="comment">i制御における積分値を0に初期化する。</p>
+            </li>
+        </ul>
+        <hr />
+        <h2>構造体他</h2>
+        <ul>
+            <li>
+                <p class="index" id="PIN_NUMBER">PIN_NUMBER</p>
+                <p class="comment">ピン番号を定義した列挙体。stm32vldiscovery上に書かれているピン番号にそのまま対応する。<br />
+                定義はmars_stm32.hでされている。</p>
+                <table>
+                    <tr><th>PA0</th></tr>
+                    <tr><th>PA1</th></tr>
+                    <tr><th>:</th></tr>
+                    <tr><th>PA15</th></tr>
+                    <tr><th>PB0</th></tr>
+                    <tr><th>:</th></tr>
+                    <tr><th>:</th></tr>
+                </table>
+            </li>
+            <li>
+                <p class="index" id="USART_TypeDef">USART_TypeDef*</p>
+                <p class="comment">3つあるUSART用構造体の変数へのポインタ。<br />
+                これは標準で定義されているものを使用している。</p>
+                <table>
+                    <tr><th>USART1</th></tr>
+                    <tr><th>USART2</th></tr>
+                    <tr><th>USART3</th></tr>
+                </table>
+            </li>
+            <li>
+                <p class="index" id="DC_SERVO">DC_SERVO</p>
+                <p class="comment">DCモータをサーボ化するために必要な変数を纏めた構造体。構造体のメンバ変数を直接操作する必要はなく、操作は全て関数を通して行う。<br />
+                定義はmars_make_servo_moter.hでされている。</p>
+            </li>
+        </ul>
+        <hr />
+        <h2 id="example">example</h2>
+        <ul>
+            <li>
+                <p class="index">Lチカ</p>
+
+                        <pre class="code">
+#include "mars_stm32.h"
+
+void main( void ){
+    RCC_Configuration();
+    PinMode( PA0, IO_INPUT_PD );
+    PinMode( PC9, IO_OUTPUT );
+    while( 1 ){
+        if(IO_Read( PA0 ) == HIGH ){
+            IO_Write( PC9, HIGH );
+        }else{
+            IO_Write( PC9, LOW );
+        }
+    }
+}
+</pre>
+            </li>
+            <li>
+                <p class="index">USARTテスト</p>
+                <pre class="code">
+#include "mars_stm32.h"
+
+void main( void ){
+    char data;
+    RCC_Configuration();
+    USART_Mode( USART1, SEND_AND_READ, DISABLE);
+    USART_Begin( USART1, 9600 );
+    while( 1 ){
+        if(USART_GetRxBufferSize( USART1 ) > 0){
+            data = USART_Getc( USART1 );
+            USART_Putc( USART1, data );
+        }
+    }
+}
+</pre>
+            </li>
+            <li>
+                <p class="index">DCモータをサーボ化</p>
+                <pre class="code">
+#include "mars_stm32.h"
+#include "mars_make_servo_moter.h"
+
+// 0[degree] ~ 90[degree]がセンサ値0 ~ 4095に線形に対応すると仮定
+int Hash(int degree){
+    return degree * 4095 / 90;
+}
+
+void main( void ){
+    DC_SERVO dcServo;
+    RCC_Configuration();
+    DC_SERVO_StructInitialize( &dcServo, PA0, PA1, 45, 30, 400, 600 );
+    DC_SERVO_SetKP_KI_KD( &dcServo, 0.1, 0.1, 0 );
+    DC_SERVO_RegisterHash( &dcServo, &Hash );
+    while( 1 ){
+        DC_SERVO_Change( &dcServo, 20 );
+    }
+}
+</pre>
+            </li>
+        </ul>
+    </article>
+</body>
+</html>
